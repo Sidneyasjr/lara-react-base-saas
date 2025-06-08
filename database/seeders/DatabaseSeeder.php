@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,19 +14,49 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Criar usuários de teste
-        User::factory(15)->create();
+        // Primeiro criar roles e permissions
+        $this->call(RolesAndPermissionsSeeder::class);
 
         // Criar um usuário específico para teste
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        $testUser = User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'password' => Hash::make('password'),
+            ]
+        );
 
         // Criar um administrador
-        User::factory()->create([
-            'name' => 'Administrador',
-            'email' => 'admin@example.com',
-        ]);
+        $adminUser = User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Administrador',
+                'password' => Hash::make('password'),
+            ]
+        );
+
+        // Criar usuários de teste apenas se não existirem
+        if (User::count() <= 2) {
+            User::factory(15)->create();
+        }
+
+        // Atribuir roles aos usuários criados
+        if (!$adminUser->hasRole('Super Admin')) {
+            $adminUser->assignRole('Super Admin');
+        }
+        
+        if (!$testUser->hasRole('User')) {
+            $testUser->assignRole('User');
+        }
+        
+        // Atribuir roles aleatórios aos outros usuários
+        $users = User::whereNotIn('email', ['test@example.com', 'admin@example.com'])
+                    ->doesntHave('roles')
+                    ->get();
+        $roles = ['Admin', 'Manager', 'User'];
+        
+        foreach ($users as $user) {
+            $user->assignRole($roles[array_rand($roles)]);
+        }
     }
 }
