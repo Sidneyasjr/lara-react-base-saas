@@ -15,6 +15,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Rotas do CRUD de usuários
     Route::resource('users', UserController::class);
+
+    // Página de demonstração dos toast messages
+    Route::get('toast-demo', function () {
+        return Inertia::render('toast-demo');
+    })->name('toast-demo');
 });
 
 require __DIR__.'/settings.php';

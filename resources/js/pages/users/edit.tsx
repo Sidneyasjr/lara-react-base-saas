@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, User, Mail, Lock } from 'lucide-react';
+import { showToast } from '@/hooks/use-toast';
 import { type BreadcrumbItem } from '@/types';
 
 interface User {
@@ -46,7 +47,19 @@ export default function Edit({ user }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    put(`/users/${user.id}`);
+    
+    const toastId = showToast.loading('Salvando alterações...');
+    
+    put(`/users/${user.id}`, {
+      onSuccess: () => {
+        showToast.dismiss(toastId);
+        showToast.success('Usuário atualizado com sucesso!');
+      },
+      onError: () => {
+        showToast.dismiss(toastId);
+        showToast.error('Erro ao atualizar usuário. Verifique os dados informados.');
+      },
+    });
   };
 
   return (

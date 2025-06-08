@@ -8,13 +8,34 @@ const Toaster = ({ ...props }: ToasterProps) => {
     <Sonner
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
+      toastOptions={{
+        style: {
+          background: "hsl(var(--background))",
+          border: "1px solid hsl(var(--border))",
+          color: "hsl(var(--foreground))",
+        },
+      }}
       style={
         {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
+          "--normal-bg": "var(--background)",
+          "--normal-text": "var(--foreground)",
           "--normal-border": "var(--border)",
+          "--success-bg": "hsl(var(--background))",
+          "--success-text": "hsl(var(--foreground))",
+          "--success-border": "hsl(var(--border))",
+          "--error-bg": "hsl(var(--background))",
+          "--error-text": "hsl(var(--foreground))",
+          "--error-border": "hsl(var(--border))",
+          "--warning-bg": "hsl(var(--background))",
+          "--warning-text": "hsl(var(--foreground))",
+          "--warning-border": "hsl(var(--border))",
+          "--info-bg": "hsl(var(--background))",
+          "--info-text": "hsl(var(--foreground))",
+          "--info-border": "hsl(var(--border))",
         } as React.CSSProperties
       }
+      position="bottom-right"
+      duration={4000}
       {...props}
     />
   )

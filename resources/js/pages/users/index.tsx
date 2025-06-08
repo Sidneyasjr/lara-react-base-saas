@@ -10,6 +10,7 @@ import { Search, Plus, Edit, Trash2, Eye, MoreHorizontal } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { showToast } from '@/hooks/use-toast';
 import { type BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -66,10 +67,22 @@ export default function UsersIndex({ users, filters }: Props) {
   };
 
   const handleDelete = (userId: number) => {
-    router.delete(route('users.destroy', userId), {
-      onSuccess: () => {
-        setDeleteUserId(null);
-      },
+    const deletePromise = new Promise((resolve, reject) => {
+      router.delete(route('users.destroy', userId), {
+        onSuccess: () => {
+          setDeleteUserId(null);
+          resolve(userId);
+        },
+        onError: () => {
+          reject(new Error('Erro ao excluir usuário'));
+        },
+      });
+    });
+
+    showToast.promise(deletePromise, {
+      loading: 'Excluindo usuário...',
+      success: 'Usuário excluído com sucesso!',
+      error: 'Erro ao excluir usuário',
     });
   };
 

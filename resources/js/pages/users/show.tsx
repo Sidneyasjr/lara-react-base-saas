@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Edit, Trash2, User, Mail, Calendar, Shield } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { showToast } from '@/hooks/use-toast';
 import { type BreadcrumbItem } from '@/types';
 
 interface User {
@@ -34,7 +35,18 @@ export default function Show({ user }: Props) {
   ];
 
   const handleDelete = () => {
-    router.delete(`/users/${user.id}`);
+    const deletePromise = new Promise((resolve, reject) => {
+      router.delete(`/users/${user.id}`, {
+        onSuccess: () => resolve(user.id),
+        onError: () => reject(new Error('Erro ao excluir usuário')),
+      });
+    });
+
+    showToast.promise(deletePromise, {
+      loading: 'Excluindo usuário...',
+      success: 'Usuário excluído com sucesso!',
+      error: 'Erro ao excluir usuário',
+    });
   };
 
   const formatDate = (dateString: string) => {

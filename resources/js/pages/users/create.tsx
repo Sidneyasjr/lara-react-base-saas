@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, User, Mail, Lock } from 'lucide-react';
+import { showToast } from '@/hooks/use-toast';
 import { type BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -29,9 +30,18 @@ export default function Create() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    const toastId = showToast.loading('Criando usuário...');
+    
     post('/users', {
       onSuccess: () => {
         reset();
+        showToast.dismiss(toastId);
+        showToast.success('Usuário criado com sucesso!');
+      },
+      onError: () => {
+        showToast.dismiss(toastId);
+        showToast.error('Erro ao criar usuário. Verifique os dados informados.');
       },
     });
   };
