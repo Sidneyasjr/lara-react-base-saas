@@ -80,7 +80,7 @@ export default function RoleCreate({ permissions }: RoleCreateProps) {
     <AppLayout>
       <Head title="Novo Role" />
 
-      <div className="space-y-6">
+      <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
         {/* Header */}
         <div className="flex items-center gap-4">
           <Button variant="outline" size="sm" asChild>

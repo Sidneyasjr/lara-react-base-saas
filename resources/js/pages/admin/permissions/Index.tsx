@@ -35,13 +35,13 @@ interface PermissionsIndexProps {
 
 export default function PermissionsIndex({ permissions, modules, statistics, filters }: PermissionsIndexProps) {
   const [searchTerm, setSearchTerm] = useState(filters.search || '');
-  const [selectedModule, setSelectedModule] = useState(filters.module || '');
+  const [selectedModule, setSelectedModule] = useState(filters.module || 'all');
   const [perPage, setPerPage] = useState(filters.per_page?.toString() || '15');
 
   const handleSearch = () => {
     router.get(route('admin.permissions.index'), {
       search: searchTerm,
-      module: selectedModule,
+      module: selectedModule === 'all' ? '' : selectedModule,
       per_page: perPage,
     }, {
       preserveState: true,
@@ -51,7 +51,7 @@ export default function PermissionsIndex({ permissions, modules, statistics, fil
 
   const handleReset = () => {
     setSearchTerm('');
-    setSelectedModule('');
+    setSelectedModule('all');
     setPerPage('15');
     router.get(route('admin.permissions.index'));
   };
@@ -73,7 +73,7 @@ export default function PermissionsIndex({ permissions, modules, statistics, fil
     <AppLayout>
       <Head title="Gerenciar Permissões" />
 
-      <div className="space-y-6">
+      <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -164,7 +164,7 @@ export default function PermissionsIndex({ permissions, modules, statistics, fil
                     <SelectValue placeholder="Todos os módulos" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Todos os módulos</SelectItem>
+                    <SelectItem value="all">Todos os módulos</SelectItem>
                     {modules.map((module) => (
                       <SelectItem key={module} value={module}>
                         {module}

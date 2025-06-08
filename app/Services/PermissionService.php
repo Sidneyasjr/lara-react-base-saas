@@ -30,7 +30,7 @@ class PermissionService
      */
     public function userCan(User $user, string $action, string $module): bool
     {
-        $permission = "{$module}.{$action}";
+        $permission = "{$action} {$module}";
         return $user->can($permission);
     }
 

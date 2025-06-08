@@ -19,10 +19,10 @@ class PermissionController extends Controller
     public function __construct(PermissionService $permissionService)
     {
         $this->permissionService = $permissionService;
-        $this->middleware('permission:permissions.view')->only(['index', 'show']);
-        $this->middleware('permission:permissions.create')->only(['create', 'store']);
-        $this->middleware('permission:permissions.edit')->only(['edit', 'update']);
-        $this->middleware('permission:permissions.delete')->only(['destroy']);
+        $this->middleware('permission:view permissions')->only(['index', 'show']);
+        $this->middleware('permission:create permissions')->only(['create', 'store']);
+        $this->middleware('permission:edit permissions')->only(['edit', 'update']);
+        $this->middleware('permission:delete permissions')->only(['destroy']);
     }
 
     /**
@@ -75,7 +75,7 @@ class PermissionController extends Controller
         $modules = Permission::getModules();
         $existingModules = collect($modules)->map(fn($module) => ['value' => $module, 'label' => $module]);
 
-        return Inertia::render('Admin/Permissions/Create', [
+        return Inertia::render('admin/permissions/Create', [
             'existingModules' => $existingModules,
         ]);
     }
@@ -124,7 +124,7 @@ class PermissionController extends Controller
         $directUsers = $permission->users()->get();
         $usersWithPermission = $usersWithPermission->merge($directUsers)->unique('id');
 
-        return Inertia::render('Admin/Permissions/Show', [
+        return Inertia::render('admin/permissions/Show', [
             'permission' => $permission,
             'roles' => $rolesWithPermission,
             'users' => $usersWithPermission->values(),
@@ -143,7 +143,7 @@ class PermissionController extends Controller
         $modules = Permission::getModules();
         $existingModules = collect($modules)->map(fn($module) => ['value' => $module, 'label' => $module]);
 
-        return Inertia::render('Admin/Permissions/Edit', [
+        return Inertia::render('admin/permissions/Edit', [
             'permission' => $permission,
             'existingModules' => $existingModules,
         ]);

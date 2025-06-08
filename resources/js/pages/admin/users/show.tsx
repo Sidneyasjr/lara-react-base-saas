@@ -68,7 +68,7 @@ export default function Show({ user }: Props) {
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title={user.name} />
 
-      <div className="space-y-6">
+      <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">{user.name}</h1>

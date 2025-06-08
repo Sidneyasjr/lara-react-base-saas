@@ -4,24 +4,14 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { Bell, LayoutGrid, Users, Shield, UserCog, KeyRound, Home } from 'lucide-react';
+import { Bell, LayoutGrid, Shield, UserCog, KeyRound } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
   {
-    title: 'Início',
-    href: '/',
-    icon: Home,
-  },
-  {
     title: 'Dashboard',
     href: '/dashboard',
     icon: LayoutGrid,
-  },
-  {
-    title: 'Usuários',
-    href: '/users',
-    icon: Users,
   },
   {
     title: 'Toast Demo',

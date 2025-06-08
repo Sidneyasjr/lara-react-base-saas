@@ -17,10 +17,10 @@ class RoleController extends Controller
     public function __construct(PermissionService $permissionService)
     {
         $this->permissionService = $permissionService;
-        $this->middleware('permission:roles.view')->only(['index', 'show']);
-        $this->middleware('permission:roles.create')->only(['create', 'store']);
-        $this->middleware('permission:roles.edit')->only(['edit', 'update']);
-        $this->middleware('permission:roles.delete')->only(['destroy']);
+        $this->middleware('permission:view roles')->only(['index', 'show']);
+        $this->middleware('permission:create roles')->only(['create', 'store']);
+        $this->middleware('permission:edit roles')->only(['edit', 'update']);
+        $this->middleware('permission:delete roles')->only(['destroy']);
     }
 
     /**
@@ -31,7 +31,7 @@ class RoleController extends Controller
         $roles = Role::withCount(['users', 'permissions'])->get();
         $statistics = $this->permissionService->getRoleStatistics();
 
-        return Inertia::render('Admin/Roles/Index', [
+        return Inertia::render('admin/roles/Index', [
             'roles' => $roles,
             'statistics' => $statistics,
         ]);
@@ -44,7 +44,7 @@ class RoleController extends Controller
     {
         $permissions = $this->permissionService->getPermissionsByModule();
 
-        return Inertia::render('Admin/Roles/Create', [
+        return Inertia::render('admin/roles/Create', [
             'permissions' => $permissions,
         ]);
     }
@@ -83,7 +83,7 @@ class RoleController extends Controller
             'users_count' => $role->users->count(),
         ];
 
-        return Inertia::render('Admin/Roles/Show', [
+        return Inertia::render('admin/roles/Show', [
             'role' => $role,
             'permissions' => $role->permissions,
             'users' => $role->users,
@@ -99,7 +99,7 @@ class RoleController extends Controller
         $role->load('permissions');
         $permissions = $this->permissionService->getPermissionsByModule();
 
-        return Inertia::render('Admin/Roles/Edit', [
+        return Inertia::render('admin/roles/Edit', [
             'role' => $role,
             'permissions' => $permissions,
         ]);

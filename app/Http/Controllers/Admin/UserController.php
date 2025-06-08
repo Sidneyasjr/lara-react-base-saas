@@ -19,10 +19,10 @@ class UserController extends Controller
     public function __construct(PermissionService $permissionService)
     {
         $this->permissionService = $permissionService;
-        $this->middleware('permission:users.view', ['only' => ['index', 'show']]);
-        $this->middleware('permission:users.create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:users.edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:users.delete', ['only' => ['destroy']]);
+        $this->middleware('permission:view users', ['only' => ['index', 'show']]);
+        $this->middleware('permission:create users', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit users', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete users', ['only' => ['destroy']]);
     }
 
     /**
@@ -44,13 +44,14 @@ class UserController extends Controller
             $query->role($request->role);
         }
 
-        $users = $query->paginate(15)->appends($request->query());
+        $perPage = $request->input('per_page', 15);
+        $users = $query->paginate($perPage)->appends($request->query());
         $roles = Role::all();
 
-        return Inertia::render('Admin/Users/Index', [
+        return Inertia::render('admin/users/index', [
             'users' => $users,
             'roles' => $roles,
-            'filters' => $request->only(['search', 'role']),
+            'filters' => $request->only(['search', 'role', 'per_page']) + ['per_page' => $perPage],
         ]);
     }
 
@@ -61,7 +62,7 @@ class UserController extends Controller
     {
         $roles = Role::all();
 
-        return Inertia::render('Admin/Users/Create', [
+        return Inertia::render('admin/users/create', [
             'roles' => $roles,
         ]);
     }
@@ -102,7 +103,7 @@ class UserController extends Controller
         $userPermissions = $this->permissionService->getUserPermissions($user);
         $permissionsByModule = collect($userPermissions['all'])->groupBy('module');
 
-        return Inertia::render('Admin/Users/Show', [
+        return Inertia::render('admin/users/show', [
             'user' => $user,
             'userPermissions' => $userPermissions,
             'permissionsByModule' => $permissionsByModule,
@@ -118,7 +119,7 @@ class UserController extends Controller
         $roles = Role::all();
         $userRoles = $user->roles->pluck('name')->toArray();
 
-        return Inertia::render('Admin/Users/Edit', [
+        return Inertia::render('admin/users/edit', [
             'user' => $user,
             'roles' => $roles,
             'userRoles' => $userRoles,

@@ -94,9 +94,9 @@ trait HasPermissionChecks
      */
     protected function canManageUsers(): bool
     {
-        return Auth::user()->can('users.create') || 
-               Auth::user()->can('users.edit') || 
-               Auth::user()->can('users.delete');
+        return Auth::user()->can('create users') || 
+               Auth::user()->can('edit users') || 
+               Auth::user()->can('delete users');
     }
 
     /**
@@ -104,9 +104,9 @@ trait HasPermissionChecks
      */
     protected function canManageRoles(): bool
     {
-        return Auth::user()->can('roles.create') || 
-               Auth::user()->can('roles.edit') || 
-               Auth::user()->can('roles.delete');
+        return Auth::user()->can('create roles') || 
+               Auth::user()->can('edit roles') || 
+               Auth::user()->can('delete roles');
     }
 
     /**

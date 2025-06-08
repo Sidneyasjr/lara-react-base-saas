@@ -13,9 +13,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    // Rotas do CRUD de usuários
-    Route::resource('users', UserController::class);
-
     // Rotas de administração com middleware de permission
     Route::prefix('admin')->name('admin.')->middleware(['permission:access admin'])->group(function () {
         // Gestão de usuários

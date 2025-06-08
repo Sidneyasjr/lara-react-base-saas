@@ -18,7 +18,7 @@ import { type BreadcrumbItem } from '@/types';
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Usuários',
-    href: '/users',
+    href: '/admin/users',
   },
 ];
 
@@ -29,6 +29,11 @@ interface User {
   email_verified_at: string | null;
   created_at: string;
   updated_at: string;
+  roles?: Array<{
+    id: number;
+    name: string;
+    description?: string;
+  }>;
 }
 
 interface PaginatedUsers {
@@ -48,7 +53,8 @@ interface Props {
   users: PaginatedUsers;
   filters: {
     search?: string;
-    per_page: number;
+    role?: string;
+    per_page?: number;
   };
 }
 
@@ -57,12 +63,12 @@ export default function UsersIndex({ users, filters }: Props) {
 
   const { data, setData, get, processing } = useForm({
     search: filters.search || '',
-    per_page: filters.per_page.toString(),
+    per_page: (filters.per_page || 15).toString(),
   });
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    get(route('users.index'), {
+    get(route('admin.users.index'), {
       preserveState: true,
       replace: true,
     });
@@ -70,7 +76,7 @@ export default function UsersIndex({ users, filters }: Props) {
 
   const handleDelete = (userId: number) => {
     const deletePromise = new Promise((resolve, reject) => {
-      router.delete(route('users.destroy', userId), {
+      router.delete(route('admin.users.destroy', userId), {
         onSuccess: () => {
           resolve(userId);
         },
@@ -123,7 +129,7 @@ export default function UsersIndex({ users, filters }: Props) {
             </p>
           </div>
           <Button asChild>
-            <Link href={route('users.create')}>
+            <Link href={route('admin.users.create')}>
               <Plus className="mr-2 h-4 w-4" />
               Novo Usuário
             </Link>
@@ -153,7 +159,7 @@ export default function UsersIndex({ users, filters }: Props) {
                 value={data.per_page}
                 onValueChange={(value) => {
                   setData('per_page', value);
-                  router.get(route('users.index'), { ...filters, per_page: value }, {
+                  router.get(route('admin.users.index'), { ...filters, per_page: value }, {
                     preserveState: true,
                     replace: true,
                   });
@@ -213,13 +219,13 @@ export default function UsersIndex({ users, filters }: Props) {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                               <DropdownMenuItem asChild>
-                                <Link href={route('users.show', user.id)}>
+                                <Link href={route('admin.users.show', user.id)}>
                                   <Eye className="mr-2 h-4 w-4" />
                                   Visualizar
                                 </Link>
                               </DropdownMenuItem>
                               <DropdownMenuItem asChild>
-                                <Link href={route('users.edit', user.id)}>
+                                <Link href={route('admin.users.edit', user.id)}>
                                   <Edit className="mr-2 h-4 w-4" />
                                   Editar
                                 </Link>

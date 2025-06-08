@@ -77,7 +77,7 @@ if (!function_exists('can_manage_users')) {
      */
     function can_manage_users(): bool
     {
-        return can_user('users.create') || can_user('users.edit') || can_user('users.delete');
+        return can_user('create users') || can_user('edit users') || can_user('delete users');
     }
 }
 
@@ -87,6 +87,6 @@ if (!function_exists('can_manage_roles')) {
      */
     function can_manage_roles(): bool
     {
-        return can_user('roles.create') || can_user('roles.edit') || can_user('roles.delete');
+        return can_user('create roles') || can_user('edit roles') || can_user('delete roles');
     }
 }
