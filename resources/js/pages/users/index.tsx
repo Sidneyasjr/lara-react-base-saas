@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Pagination } from '@/components/ui/pagination';
 import { Search, Plus, Edit, Trash2, Eye, MoreHorizontal } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
@@ -228,45 +229,10 @@ export default function UsersIndex({ users, filters }: Props) {
             </div>
 
             {/* Paginação */}
-            {users.last_page > 1 && (
-              <div className="flex items-center justify-between space-x-2 py-4">
-                <div className="text-sm text-muted-foreground">
-                  Mostrando {users.data.length} de {users.total} usuários
-                </div>
-                <div className="flex items-center space-x-2">
-                  {users.links.map((link, index) => {
-                    if (link.label === 'Previous' || link.label === 'Next') {
-                      return (
-                        <Button
-                          key={index}
-                          variant="outline"
-                          size="sm"
-                          disabled={!link.url}
-                          onClick={() => link.url && router.get(link.url)}
-                        >
-                          {link.label === 'Previous' ? 'Anterior' : 'Próximo'}
-                        </Button>
-                      );
-                    }
-                    
-                    if (link.label === '...') {
-                      return <span key={index} className="px-3 py-1">...</span>;
-                    }
-                    
-                    return (
-                      <Button
-                        key={index}
-                        variant={link.active ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => link.url && router.get(link.url)}
-                      >
-                        {link.label}
-                      </Button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+            <Pagination 
+              data={users} 
+              showingText={(from, to, total) => `Mostrando ${from} a ${to} de ${total} usuários`}
+            />
           </CardContent>
         </Card>
       </div>
