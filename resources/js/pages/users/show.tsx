@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Edit, Trash2, User, Mail, Calendar, Shield } from 'lucide-react';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
+import { useConfirmDelete } from '@/hooks/use-confirm-delete';
 import { showToast } from '@/hooks/use-toast';
 import { type BreadcrumbItem } from '@/types';
 
@@ -23,6 +24,25 @@ interface Props {
 }
 
 export default function Show({ user }: Props) {
+  const { dialogProps, openDialog } = useConfirmDelete({
+    onConfirm: () => {
+      const deletePromise = new Promise((resolve, reject) => {
+        router.delete(`/users/${user.id}`, {
+          onSuccess: () => resolve(user.id),
+          onError: () => reject(new Error('Erro ao excluir usuário')),
+        });
+      });
+
+      showToast.promise(deletePromise, {
+        loading: 'Excluindo usuário...',
+        success: 'Usuário excluído com sucesso!',
+        error: 'Erro ao excluir usuário',
+      });
+    },
+    title: 'Excluir usuário',
+    description: `Tem certeza que deseja excluir o usuário "${user.name}"? Esta ação não pode ser desfeita.`,
+  });
+  
   const breadcrumbs: BreadcrumbItem[] = [
     {
       title: 'Usuários',
@@ -33,21 +53,6 @@ export default function Show({ user }: Props) {
       href: `/users/${user.id}`,
     },
   ];
-
-  const handleDelete = () => {
-    const deletePromise = new Promise((resolve, reject) => {
-      router.delete(`/users/${user.id}`, {
-        onSuccess: () => resolve(user.id),
-        onError: () => reject(new Error('Erro ao excluir usuário')),
-      });
-    });
-
-    showToast.promise(deletePromise, {
-      loading: 'Excluindo usuário...',
-      success: 'Usuário excluído com sucesso!',
-      error: 'Erro ao excluir usuário',
-    });
-  };
 
   const formatDate = (dateString: string) => {
     return new Intl.DateTimeFormat('pt-BR', {
@@ -78,29 +83,10 @@ export default function Show({ user }: Props) {
                 Editar
               </Button>
             </Link>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive">
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Excluir
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Excluir usuário</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Tem certeza que deseja excluir o usuário <strong>{user.name}</strong>?
-                    Esta ação não pode ser desfeita.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                    Excluir
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <Button variant="destructive" onClick={openDialog}>
+              <Trash2 className="mr-2 h-4 w-4" />
+              Excluir
+            </Button>
             <Link href="/users">
               <Button variant="outline">
                 <ArrowLeft className="mr-2 h-4 w-4" />
@@ -195,6 +181,8 @@ export default function Show({ user }: Props) {
           </CardContent>
         </Card>
       </div>
+
+      <ConfirmDeleteDialog {...dialogProps} />
     </AppLayout>
   );
 }

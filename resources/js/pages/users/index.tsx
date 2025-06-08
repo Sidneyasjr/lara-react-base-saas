@@ -9,8 +9,9 @@ import { Badge } from '@/components/ui/badge';
 import { Pagination } from '@/components/ui/pagination';
 import { Search, Plus, Edit, Trash2, Eye, MoreHorizontal } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
+import { useConfirmDelete } from '@/hooks/use-confirm-delete';
 import { showToast } from '@/hooks/use-toast';
 import { type BreadcrumbItem } from '@/types';
 
@@ -52,8 +53,8 @@ interface Props {
 }
 
 export default function UsersIndex({ users, filters }: Props) {
-  const [deleteUserId, setDeleteUserId] = useState<number | null>(null);
-  
+  const [userToDelete, setUserToDelete] = useState<number | null>(null);
+
   const { data, setData, get, processing } = useForm({
     search: filters.search || '',
     per_page: filters.per_page.toString(),
@@ -71,7 +72,6 @@ export default function UsersIndex({ users, filters }: Props) {
     const deletePromise = new Promise((resolve, reject) => {
       router.delete(route('users.destroy', userId), {
         onSuccess: () => {
-          setDeleteUserId(null);
           resolve(userId);
         },
         onError: () => {
@@ -85,6 +85,19 @@ export default function UsersIndex({ users, filters }: Props) {
       success: 'Usuário excluído com sucesso!',
       error: 'Erro ao excluir usuário',
     });
+  };
+
+  const confirmDelete = useConfirmDelete({
+    onConfirm: () => {
+      if (userToDelete) handleDelete(userToDelete);
+    },
+    title: 'Confirmar exclusão',
+    description: 'Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita.',
+  });
+
+  const openDeleteDialog = (userId: number) => {
+    setUserToDelete(userId);
+    confirmDelete.openDialog();
   };
 
   const formatDate = (dateString: string) => {
@@ -213,7 +226,7 @@ export default function UsersIndex({ users, filters }: Props) {
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 className="text-destructive"
-                                onClick={() => setDeleteUserId(user.id)}
+                                onClick={() => openDeleteDialog(user.id)}
                               >
                                 <Trash2 className="mr-2 h-4 w-4" />
                                 Excluir
@@ -237,26 +250,7 @@ export default function UsersIndex({ users, filters }: Props) {
         </Card>
       </div>
 
-      {/* Dialog de confirmação de exclusão */}
-      <AlertDialog open={deleteUserId !== null} onOpenChange={() => setDeleteUserId(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
-            <AlertDialogDescription>
-              Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-              onClick={() => deleteUserId && handleDelete(deleteUserId)}
-            >
-              Excluir
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmDeleteDialog {...confirmDelete.dialogProps} />
     </AppLayout>
   );
 }
