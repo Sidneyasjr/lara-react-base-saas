@@ -235,7 +235,7 @@ export default function UsersIndex({ users, filters }: Props) {
                 </div>
                 <div className="flex items-center space-x-2">
                   {users.links.map((link, index) => {
-                    if (link.label === '&laquo; Previous' || link.label === 'Next &raquo;') {
+                    if (link.label === 'Previous' || link.label === 'Next') {
                       return (
                         <Button
                           key={index}
@@ -244,7 +244,7 @@ export default function UsersIndex({ users, filters }: Props) {
                           disabled={!link.url}
                           onClick={() => link.url && router.get(link.url)}
                         >
-                          {link.label === '&laquo; Previous' ? 'Anterior' : 'Próximo'}
+                          {link.label === 'Previous' ? 'Anterior' : 'Próximo'}
                         </Button>
                       );
                     }
