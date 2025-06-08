@@ -5,14 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, User, Mail, Lock } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { ArrowLeft, User, Mail, Lock, Shield } from 'lucide-react';
 import { showToast } from '@/hooks/use-toast';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, type Role } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Usuários',
-    href: '/users',
+    href: '/admin/users',
   },
   {
     title: 'Criar Usuário',
@@ -20,12 +21,17 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
-export default function Create() {
+interface Props {
+  roles: Role[];
+}
+
+export default function Create({ roles }: Props) {
   const { data, setData, post, processing, errors, reset } = useForm({
     name: '',
     email: '',
     password: '',
     password_confirmation: '',
+    roles: [] as string[],
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -152,11 +158,63 @@ export default function Create() {
                 </div>
               </div>
 
+              {/* Roles Section */}
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label className="text-base font-medium flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    Papéis (Roles)
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Selecione os papéis que serão atribuídos ao usuário.
+                  </p>
+                </div>
+                
+                {roles.length > 0 ? (
+                  <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                    {roles.map((role) => (
+                      <div key={role.id} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`role-${role.id}`}
+                          checked={data.roles.includes(role.name)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setData('roles', [...data.roles, role.name]);
+                            } else {
+                              setData('roles', data.roles.filter((r) => r !== role.name));
+                            }
+                          }}
+                        />
+                        <Label 
+                          htmlFor={`role-${role.id}`}
+                          className="text-sm font-normal cursor-pointer"
+                        >
+                          {role.name}
+                          {role.description && (
+                            <span className="block text-xs text-muted-foreground">
+                              {role.description}
+                            </span>
+                          )}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    Nenhum papel disponível.
+                  </p>
+                )}
+                
+                {errors.roles && (
+                  <p className="text-sm text-destructive">{errors.roles}</p>
+                )}
+              </div>
+
               <div className="flex items-center gap-4 pt-4">
                 <Button type="submit" disabled={processing}>
                   {processing ? 'Criando...' : 'Criar Usuário'}
                 </Button>
-                <Link href="/users">
+                <Link href={route('admin.users.index')}>
                   <Button type="button" variant="outline">
                     Cancelar
                   </Button>

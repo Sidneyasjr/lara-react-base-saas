@@ -16,6 +16,17 @@ interface RoleCreateProps {
   permissions: PermissionsByModule;
 }
 
+const breadcrumbs = [
+  {
+    title: 'Roles',
+    href: '/admin/roles',
+  },
+  {
+    title: 'Criar Role',
+    href: '/admin/roles/create',
+  },
+];
+
 export default function RoleCreate({ permissions }: RoleCreateProps) {
   const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({});
 
@@ -77,7 +88,7 @@ export default function RoleCreate({ permissions }: RoleCreateProps) {
   };
 
   return (
-    <AppLayout>
+    <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Novo Role" />
 
       <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">

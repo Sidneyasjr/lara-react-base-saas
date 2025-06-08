@@ -18,6 +18,16 @@ interface ExistingModule {
 interface PermissionCreateProps {
   existingModules: ExistingModule[];
 }
+const breadcrumbs = [
+  {
+    title: 'Permissões',
+    href: '/admin/permissions',
+  },
+  {
+    title: 'Criar Permissão',
+    href: '/admin/permissions/create',
+  },
+];
 
 export default function PermissionCreate({ existingModules }: PermissionCreateProps) {
   
@@ -51,7 +61,7 @@ export default function PermissionCreate({ existingModules }: PermissionCreatePr
   const commonActions = ['view', 'create', 'edit', 'delete'];
 
   return (
-    <AppLayout>
+    <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Nova Permissão" />
 
       <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">

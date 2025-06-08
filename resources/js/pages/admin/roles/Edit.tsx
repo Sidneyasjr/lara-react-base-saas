@@ -17,6 +17,17 @@ interface RoleEditProps {
   permissions: PermissionsByModule;
 }
 
+const breadcrumbs = [
+  {
+    title: 'Roles',
+    href: '/admin/roles',
+  },
+  {
+    title: 'Editar Role',
+    href: '/admin/roles/edit',
+  },
+];
+
 export default function RoleEdit({ role, permissions }: RoleEditProps) {
   const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({});
 
@@ -75,7 +86,7 @@ export default function RoleEdit({ role, permissions }: RoleEditProps) {
   };
 
   return (
-    <AppLayout>
+    <AppLayout breadcrumbs={breadcrumbs}>
       <Head title={`Editar Role: ${role.name}`} />
 
       <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
