@@ -29,15 +29,15 @@ export default function Edit({ user, roles, userRoles }: Props) {
   const breadcrumbs: BreadcrumbItem[] = [
     {
       title: 'Usuários',
-      href: '/users',
+      href: '/admin/users',
     },
     {
       title: user.name,
-      href: `/users/${user.id}`,
+      href: `/admin/users/${user.id}`,
     },
     {
       title: 'Editar',
-      href: `/users/${user.id}/edit`,
+      href: `/admin/users/${user.id}/edit`,
     },
   ];
 
@@ -54,7 +54,7 @@ export default function Edit({ user, roles, userRoles }: Props) {
     
     const toastId = showToast.loading('Salvando alterações...');
     
-    put(`/users/${user.id}`, {
+    put(`/admin/users/${user.id}`, {
       onSuccess: () => {
         showToast.dismiss(toastId);
         showToast.success('Usuário atualizado com sucesso!');
@@ -79,12 +79,12 @@ export default function Edit({ user, roles, userRoles }: Props) {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Link href={`/users/${user.id}`}>
+            <Link href={`/admin/users/${user.id}`}>
               <Button variant="outline">
                 Visualizar
               </Button>
             </Link>
-            <Link href="/users">
+            <Link href="/admin/users">
               <Button variant="outline">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Voltar
@@ -236,7 +236,7 @@ export default function Edit({ user, roles, userRoles }: Props) {
                 <Button type="submit" disabled={processing}>
                   {processing ? 'Salvando...' : 'Salvar Alterações'}
                 </Button>
-                <Link href={`/users/${user.id}`}>
+                <Link href={`/admin/users/${user.id}`}>
                   <Button type="button" variant="outline">
                     Cancelar
                   </Button>

@@ -27,7 +27,7 @@ export default function Show({ user }: Props) {
   const { dialogProps, openDialog } = useConfirmDelete({
     onConfirm: () => {
       const deletePromise = new Promise((resolve, reject) => {
-        router.delete(`/users/${user.id}`, {
+        router.delete(`/admin/users/${user.id}`, {
           onSuccess: () => resolve(user.id),
           onError: () => reject(new Error('Erro ao excluir usuário')),
         });
@@ -46,11 +46,11 @@ export default function Show({ user }: Props) {
   const breadcrumbs: BreadcrumbItem[] = [
     {
       title: 'Usuários',
-      href: '/users',
+      href: '/admin/users',
     },
     {
       title: user.name,
-      href: `/users/${user.id}`,
+      href: `/admin/users/${user.id}`,
     },
   ];
 
@@ -77,7 +77,7 @@ export default function Show({ user }: Props) {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Link href={`/users/${user.id}/edit`}>
+            <Link href={`/admin/users/${user.id}/edit`}>
               <Button>
                 <Edit className="mr-2 h-4 w-4" />
                 Editar
@@ -87,7 +87,7 @@ export default function Show({ user }: Props) {
               <Trash2 className="mr-2 h-4 w-4" />
               Excluir
             </Button>
-            <Link href="/users">
+            <Link href="/admin/users">
               <Button variant="outline">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Voltar
@@ -160,7 +160,7 @@ export default function Show({ user }: Props) {
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
-              <Link href={`/users/${user.id}/edit`}>
+              <Link href={`/admin/users/${user.id}/edit`}>
                 <Button variant="outline" size="sm">
                   <Edit className="mr-2 h-4 w-4" />
                   Editar Usuário

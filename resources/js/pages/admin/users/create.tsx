@@ -17,7 +17,7 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
   {
     title: 'Criar Usuário',
-    href: '/users/create',
+    href: '/admin/users/create',
   },
 ];
 
@@ -39,7 +39,7 @@ export default function Create({ roles }: Props) {
     
     const toastId = showToast.loading('Criando usuário...');
     
-    post('/users', {
+    post('/admin/users', {
       onSuccess: () => {
         reset();
         showToast.dismiss(toastId);
@@ -64,7 +64,7 @@ export default function Create({ roles }: Props) {
               Adicione um novo usuário ao sistema.
             </p>
           </div>
-          <Link href="/users">
+          <Link href="/admin/users">
             <Button variant="outline">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Voltar
@@ -214,7 +214,7 @@ export default function Create({ roles }: Props) {
                 <Button type="submit" disabled={processing}>
                   {processing ? 'Criando...' : 'Criar Usuário'}
                 </Button>
-                <Link href={route('admin.users.index')}>
+                <Link href="/admin/users">
                   <Button type="button" variant="outline">
                     Cancelar
                   </Button>
