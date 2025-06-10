@@ -17,6 +17,9 @@ class DatabaseSeeder extends Seeder
         // Primeiro criar roles e permissions
         $this->call(RolesAndPermissionsSeeder::class);
 
+        // Criar itens de menu após as permissões
+        $this->call(MenuItemsSeeder::class);
+
         // Criar um usuário específico para teste
         $testUser = User::firstOrCreate(
             ['email' => 'test@example.com'],

@@ -39,6 +39,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('permissions.bulk-assign-role')->middleware(['permission:edit permissions']);
         Route::delete('permissions/bulk-remove-role', [App\Http\Controllers\Admin\PermissionController::class, 'bulkRemoveFromRole'])
             ->name('permissions.bulk-remove-role')->middleware(['permission:edit permissions']);
+
+        // Gestão de menus
+        Route::prefix('menus')->name('menus.')->middleware(['permission:settings.menus'])->group(function () {
+            Route::get('/', [App\Http\Controllers\MenuController::class, 'index'])->name('index');
+            Route::get('/create', [App\Http\Controllers\MenuController::class, 'create'])->name('create');
+            Route::post('/', [App\Http\Controllers\MenuController::class, 'store'])->name('store');
+            Route::get('/{menuItem}/edit', [App\Http\Controllers\MenuController::class, 'edit'])->name('edit');
+            Route::put('/{menuItem}', [App\Http\Controllers\MenuController::class, 'update'])->name('update');
+            Route::delete('/{menuItem}', [App\Http\Controllers\MenuController::class, 'destroy'])->name('destroy');
+            Route::patch('/{menuItem}/toggle', [App\Http\Controllers\MenuController::class, 'toggle'])->name('toggle');
+            Route::post('/reorder', [App\Http\Controllers\MenuController::class, 'reorder'])->name('reorder');
+            Route::post('/clear-cache', [App\Http\Controllers\MenuController::class, 'clearCache'])->name('clear-cache');
+            Route::get('/search', [App\Http\Controllers\MenuController::class, 'search'])->name('search');
+        });
+    });
+
+    // API routes para menu (acessível por todos os usuários autenticados)
+    Route::prefix('api')->name('api.')->group(function () {
+        Route::get('menu', [App\Http\Controllers\MenuController::class, 'getMenu'])->name('menu');
+        Route::get('menu/breadcrumb', [App\Http\Controllers\MenuController::class, 'breadcrumb'])->name('menu.breadcrumb');
     });
 
     // Página de demonstração dos toast messages

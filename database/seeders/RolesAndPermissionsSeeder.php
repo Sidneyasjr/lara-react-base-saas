@@ -45,6 +45,13 @@ class RolesAndPermissionsSeeder extends Seeder
             'settings' => [
                 ['name' => 'settings.view', 'description' => 'Visualizar configurações'],
                 ['name' => 'settings.edit', 'description' => 'Editar configurações'],
+                ['name' => 'settings.general', 'description' => 'Configurações gerais'],
+                ['name' => 'settings.menus', 'description' => 'Gerenciar menus do sistema'],
+            ],
+            'reports' => [
+                ['name' => 'reports.view', 'description' => 'Visualizar relatórios'],
+                ['name' => 'reports.users', 'description' => 'Relatório de usuários'],
+                ['name' => 'reports.permissions', 'description' => 'Relatório de permissões'],
             ],
             'analytics' => [
                 ['name' => 'analytics.view', 'description' => 'Visualizar analytics'],
@@ -103,7 +110,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'view users', 'create users', 'edit users', 'delete users', 'manage users',
             'view roles', 'create roles', 'edit roles', 'delete roles', 'manage roles',
             'view permissions', 'create permissions', 'edit permissions', 'delete permissions', 'manage permissions',
-            'settings.view', 'settings.edit',
+            'settings.view', 'settings.edit', 'settings.general', 'settings.menus',
+            'reports.view', 'reports.users', 'reports.permissions',
             'analytics.view',
             'menu.view', 'menu.edit',
         ]);

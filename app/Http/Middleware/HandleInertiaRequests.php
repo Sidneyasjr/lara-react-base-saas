@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\MenuService;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -48,6 +49,7 @@ class HandleInertiaRequests extends Middleware
                 'permissions' => $request->user() ? $request->user()->getAllPermissions()->pluck('name') : [],
                 'roles' => $request->user() ? $request->user()->getRoleNames() : [],
             ],
+            'menu' => $request->user() ? app(MenuService::class)->getMenuForUser($request->user())->values()->toArray() : [],
             'ziggy' => fn (): array => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),

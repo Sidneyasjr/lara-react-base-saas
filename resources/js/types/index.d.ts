@@ -124,3 +124,55 @@ export interface RoleStatistics {
     permissions_count: number;
   }>;
 }
+
+// Menu System Interfaces
+export interface MenuItem {
+  id: number;
+  tenant_id?: number | null;
+  parent_id?: number | null;
+  title: string;
+  route_name?: string | null;
+  icon?: string | null;
+  permission_required?: string | null;
+  order_index: number;
+  is_active: boolean;
+  module: string;
+  created_at: string;
+  updated_at: string;
+  children?: MenuItem[];
+  parent?: MenuItem;
+}
+
+export interface MenuConfig {
+  module: string;
+  tenant_id?: number | null;
+  show_inactive?: boolean;
+  max_depth?: number;
+  filter_permissions?: boolean;
+}
+
+export interface MenuTreeNode extends MenuItem {
+  children: MenuTreeNode[];
+  level: number;
+  has_permission: boolean;
+  is_current_route: boolean;
+}
+
+export interface DynamicMenuProps {
+  items: MenuItem[];
+  config?: Partial<MenuConfig>;
+  className?: string;
+  onItemClick?: (item: MenuItem) => void;
+  currentRoute?: string;
+  collapsible?: boolean;
+  showIcons?: boolean;
+}
+
+export interface MenuItemComponentProps {
+  item: MenuTreeNode;
+  level?: number;
+  isCollapsed?: boolean;
+  showIcon?: boolean;
+  onItemClick?: (item: MenuItem) => void;
+  currentRoute?: string;
+}
