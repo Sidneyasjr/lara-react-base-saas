@@ -14,8 +14,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Primeiro criar roles e permissions
+        // Primeiro criar permissões públicas
+        $this->call(PublicPermissionsSeeder::class);
+        
+        // Depois criar roles e permissions administrativas
         $this->call(RolesAndPermissionsSeeder::class);
+
+        // Criar permissões avançadas (opcional - descomente se necessário)
+        // $this->call(AdvancedPermissionsSeeder::class);
 
         // Criar itens de menu após as permissões
         $this->call(MenuItemsSeeder::class);

@@ -19,6 +19,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Register custom commands
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                \App\Console\Commands\GeneratePermissionsFromRoutes::class,
+            ]);
+        }
     }
 }

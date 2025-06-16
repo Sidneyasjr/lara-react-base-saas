@@ -22,107 +22,118 @@ class MenuItemsSeeder extends Seeder
             'title' => 'Dashboard',
             'route_name' => 'dashboard',
             'icon' => 'dashboard',
-            'permission_required' => null, // Todos podem acessar
+            'permission_required' => 'dashboard',
             'order_index' => 1,
             'is_active' => true,
             'module' => 'Principal',
         ]);
 
-        // Menu de Usuários - agora itens diretos
+        // Home
         MenuItem::create([
-            'title' => 'Lista de Usuários',
-            'route_name' => 'users.index',
-            'icon' => 'users',
-            'permission_required' => 'users.view',
-            'order_index' => 1,
-            'is_active' => true,
-            'module' => 'Usuários',
-        ]);
-
-        MenuItem::create([
-            'title' => 'Criar Usuário',
-            'route_name' => 'users.create',
-            'icon' => 'user',
-            'permission_required' => 'users.create',
+            'title' => 'Início',
+            'route_name' => 'home',
+            'icon' => 'home',
+            'permission_required' => 'home',
             'order_index' => 2,
             'is_active' => true,
-            'module' => 'Usuários',
+            'module' => 'Principal',
         ]);
 
-        // Menu de Permissões e Roles - itens diretos
+        // --- ADMINISTRAÇÃO ---
+        
+        // Gestão de Usuários
         MenuItem::create([
-            'title' => 'Permissões',
-            'route_name' => 'permissions.index',
-            'icon' => 'key',
-            'permission_required' => 'permissions.view',
+            'title' => 'Usuários',
+            'route_name' => 'admin.users.index',
+            'icon' => 'users',
+            'permission_required' => 'admin.users.index',
             'order_index' => 1,
             'is_active' => true,
-            'module' => 'Segurança',
+            'module' => 'Administração',
         ]);
 
+        // Gestão de Roles
         MenuItem::create([
             'title' => 'Roles',
-            'route_name' => 'roles.index',
-            'icon' => 'lock',
-            'permission_required' => 'roles.view',
+            'route_name' => 'admin.roles.index',
+            'icon' => 'shield',
+            'permission_required' => 'admin.roles.index',
             'order_index' => 2,
             'is_active' => true,
-            'module' => 'Segurança',
+            'module' => 'Administração',
         ]);
 
-        // Menu de Configurações - itens diretos
+        // Gestão de Permissões
         MenuItem::create([
-            'title' => 'Configurações Gerais',
-            'route_name' => 'settings.general',
-            'icon' => 'settings',
-            'permission_required' => 'settings.general',
-            'order_index' => 1,
+            'title' => 'Permissões',
+            'route_name' => 'admin.permissions.index',
+            'icon' => 'key',
+            'permission_required' => 'admin.permissions.index',
+            'order_index' => 3,
             'is_active' => true,
-            'module' => 'Configurações',
+            'module' => 'Administração',
         ]);
 
+        // Gestão de Menus
         MenuItem::create([
-            'title' => 'Gerenciar Menus',
-            'route_name' => 'settings.menus',
+            'title' => 'Menus',
+            'route_name' => 'admin.menus.index',
             'icon' => 'menu',
-            'permission_required' => 'settings.menus',
-            'order_index' => 2,
+            'permission_required' => 'admin.menus.index',
+            'order_index' => 4,
+            'is_active' => true,
+            'module' => 'Administração',
+        ]);
+
+        // --- CONFIGURAÇÕES ---
+        
+        // Aparência
+        MenuItem::create([
+            'title' => 'Aparência',
+            'route_name' => 'appearance',
+            'icon' => 'palette',
+            'permission_required' => 'settings.appearance',
+            'order_index' => 1,
             'is_active' => true,
             'module' => 'Configurações',
         ]);
 
-        // Menu de Relatórios - itens diretos
-        MenuItem::create([
-            'title' => 'Relatório de Usuários',
-            'route_name' => 'reports.users',
-            'icon' => 'chart',
-            'permission_required' => 'reports.users',
-            'order_index' => 1,
-            'is_active' => true,
-            'module' => 'Relatórios',
-        ]);
-
-        MenuItem::create([
-            'title' => 'Relatório de Permissões',
-            'route_name' => 'reports.permissions',
-            'icon' => 'chart',
-            'permission_required' => 'reports.permissions',
-            'order_index' => 2,
-            'is_active' => true,
-            'module' => 'Relatórios',
-        ]);
-
-        // Menu do Perfil do Usuário
+        // Configurações do Perfil
         MenuItem::create([
             'title' => 'Meu Perfil',
             'route_name' => 'profile.edit',
             'icon' => 'user',
-            'permission_required' => null, // Todos podem acessar
-            'order_index' => 1,
+            'permission_required' => 'settings.profile.edit',
+            'order_index' => 2,
             'is_active' => true,
-            'module' => 'Perfil',
+            'module' => 'Configurações',
         ]);
 
-        $this->command->info('Menu items criados com sucesso!');
+        // Configurações de Senha
+        MenuItem::create([
+            'title' => 'Alterar Senha',
+            'route_name' => 'password.edit',
+            'icon' => 'lock',
+            'permission_required' => 'settings.password.edit',
+            'order_index' => 3,
+            'is_active' => true,
+            'module' => 'Configurações',
+        ]);
+
+        // --- DEMOS E TESTES ---
+        
+        // Demo de Toast
+        MenuItem::create([
+            'title' => 'Demo Toast',
+            'route_name' => 'toast-demo',
+            'icon' => 'bell',
+            'permission_required' => 'toast-demo',
+            'order_index' => 1,
+            'is_active' => true,
+            'module' => 'Demos',
+        ]);
+
+        $this->command->info('Menu items criados com sucesso baseados nas rotas existentes!');
+        $this->command->info('Total de items criados: ' . MenuItem::count());
     }
 }
